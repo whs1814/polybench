@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Mar. 18, 2015
+ * This version is stamped on Apr. 14, 2015
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -57,7 +57,7 @@ unsigned long long int polybench_c_start, polybench_c_end;
 static
 double rtclock()
 {
-#ifdef POLYBENCH_TIME
+#if defined(POLYBENCH_TIME) || defined(POLYBENCH_GFLOPS)
     struct timeval Tp;
     int stat;
     stat = gettimeofday (&Tp, NULL);
@@ -358,14 +358,14 @@ void polybench_timer_stop()
 void polybench_timer_print()
 {
 #ifdef POLYBENCH_GFLOPS
-      if  (__polybench_program_total_flops == 0)
+      if  (polybench_program_total_flops == 0)
 	{
 	  printf ("[PolyBench][WARNING] Program flops not defined, use polybench_set_program_flops(value)\n");
 	  printf ("%0.6lf\n", polybench_t_end - polybench_t_start);
 	}
       else
 	printf ("%0.2lf\n",
-		(__polybench_program_total_flops /
+		(polybench_program_total_flops /
 		 (double)(polybench_t_end - polybench_t_start)) / 1000000000);
 #else
 # ifndef POLYBENCH_CYCLE_ACCURATE_TIMER

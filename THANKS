@@ -1,10 +1,11 @@
 We would like to thank the following people for giving reporting bugs and
 giving feedback to PolyBench:
+ * François Gindraud
  * Tobias Grosser
+ * Guillaume Iooss
  * Peng Li
  * Sanjay Rajopadhye
  * Sven Verdoolaege
- * Guillaume Iooss
 
 and the following for providing reference C implementations:
  * Dave Wonnacott, Haverford College <davew@cs.haverford.edu>

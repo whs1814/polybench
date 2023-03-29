@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Mar. 18, 2015
+ * This version is stamped on Apr. 14, 2015
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -82,8 +82,8 @@ void kernel_gesummv(int n,
 #pragma scop
   for (i = 0; i < _PB_N; i++)
     {
-      tmp[i] = SCALAR_VAL(0);
-      y[i] = SCALAR_VAL(0);
+      tmp[i] = SCALAR_VAL(0.0);
+      y[i] = SCALAR_VAL(0.0);
       for (j = 0; j < _PB_N; j++)
 	{
 	  tmp[i] = A[i][j] * x[j] + tmp[i];

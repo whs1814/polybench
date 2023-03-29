@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Mar. 18, 2015
+ * This version is stamped on Apr. 14, 2015
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -71,7 +71,7 @@ void kernel_durbin(int n,
 
 #pragma scop
  y[0] = -r[0];
- beta = SCALAR_VAL(1);
+ beta = SCALAR_VAL(1.0);
  alpha = -r[0];
 
  for (k = 1; k < _PB_N; k++) {
