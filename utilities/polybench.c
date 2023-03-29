@@ -1,5 +1,5 @@
 /**
- * polybench.c: This file is part of the PolyBench 3.0 test suite.
+ * polybench.c: This file is part of the PolyBench/C 3.2 test suite.
  *
  *
  * Contact: Louis-Noel Pouchet <pouchet@cse.ohio-state.edu>
@@ -68,20 +68,19 @@ double rtclock()
 }
 
 
+#ifdef POLYBENCH_CYCLE_ACCURATE_TIMER
 static
 unsigned long long int rdtsc()
 {
   unsigned long long int ret = 0;
   unsigned int cycles_lo;
   unsigned int cycles_hi;
-
-#ifdef POLYBENCH_CYCLE_ACCURATE_TIMER
   __asm__ volatile ("RDTSC" : "=a" (cycles_lo), "=d" (cycles_hi));
   ret = (unsigned long long int)cycles_hi << 32 | cycles_lo;
-#endif
 
   return ret;
 }
+#endif
 
 void polybench_flush_cache()
 {
@@ -392,9 +391,12 @@ xmalloc (size_t num)
 }
 
 
-void* polybench_alloc_data(int n, int elt_size)
+void* polybench_alloc_data(unsigned long long int n, int elt_size)
 {
-  void* ret = xmalloc (n * elt_size);
+  /// FIXME: detect overflow!
+  size_t val = n;
+  val *= elt_size;
+  void* ret = xmalloc (val);
 
   return ret;
 }

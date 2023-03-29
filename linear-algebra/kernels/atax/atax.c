@@ -1,5 +1,5 @@
 /**
- * atax.c: This file is part of the PolyBench 3.0 test suite.
+ * atax.c: This file is part of the PolyBench/C 3.2 test suite.
  *
  *
  * Contact: Louis-Noel Pouchet <pouchet@cse.ohio-state.edu>
@@ -57,20 +57,20 @@ static
 void kernel_atax(int nx, int ny,
 		 DATA_TYPE POLYBENCH_2D(A,NX,NY,nx,ny),
 		 DATA_TYPE POLYBENCH_1D(x,NY,ny),
-		 DATA_TYPE POLYBENCH_1D(y,NX,nx),
-		 DATA_TYPE POLYBENCH_1D(tmp,NY,ny))
+		 DATA_TYPE POLYBENCH_1D(y,NY,ny),
+		 DATA_TYPE POLYBENCH_1D(tmp,NX,nx))
 {
   int i, j;
 
 #pragma scop
-  for (i= 0; i < nx; i++)
+  for (i = 0; i < _PB_NY; i++)
     y[i] = 0;
-  for (i = 0; i < ny; i++)
+  for (i = 0; i < _PB_NX; i++)
     {
       tmp[i] = 0;
-      for (j = 0; j < ny; j++)
+      for (j = 0; j < _PB_NY; j++)
 	tmp[i] = tmp[i] + A[i][j] * x[j];
-      for (j = 0; j < ny; j++)
+      for (j = 0; j < _PB_NY; j++)
 	y[j] = y[j] + A[i][j] * tmp[i];
     }
 #pragma endscop
@@ -87,8 +87,8 @@ int main(int argc, char** argv)
   /* Variable declaration/allocation. */
   POLYBENCH_2D_ARRAY_DECL(A, DATA_TYPE, NX, NY, nx, ny);
   POLYBENCH_1D_ARRAY_DECL(x, DATA_TYPE, NY, ny);
-  POLYBENCH_1D_ARRAY_DECL(y, DATA_TYPE, NX, nx);
-  POLYBENCH_1D_ARRAY_DECL(tmp, DATA_TYPE, NY, ny);
+  POLYBENCH_1D_ARRAY_DECL(y, DATA_TYPE, NY, ny);
+  POLYBENCH_1D_ARRAY_DECL(tmp, DATA_TYPE, NX, nx);
 
   /* Initialize array(s). */
   init_array (nx, ny, POLYBENCH_ARRAY(A), POLYBENCH_ARRAY(x));
