@@ -29,7 +29,7 @@ for i in `ls`; do
 	fi;
 	for j in `find $i -name "*.c"`; do
 	    echo "Testing $j";
-	    $rootdir/scripts/compile.sh "$rootdir" "$COMPILER_F_COMMAND" "$j" "transfo" > /dev/null;
+	    $rootdir/scripts/compile.sh "$rootdir" "$COMPILER_F_COMMAND" "$BENCHCAT/$j" "transfo" > /dev/null;
 	    if [ $? -ne 0 ]; then
 		echo "Problem when compiling $j";
 	    else

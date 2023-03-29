@@ -1,17 +1,18 @@
 #!/bin/sh
 
-if [ $# -ne 3 ]; then
-    echo "Usage: compile.sh <compiler command> <input file> <output file>";
+if [ $# -ne 4 ]; then
+    echo "Usage: compile.sh <archive root dir> <compiler command> <input file> <output file>";
     exit 1;
 fi;
 
-COMPILER_COMMAND="$1";
-INPUT_FILE="$2";
-OUTPUT_FILE="$3";
+ROOTDIR="$1";
+COMPILER_COMMAND="$2";
+INPUT_FILE="$3";
+OUTPUT_FILE="$4";
 
-$COMPILER_COMMAND  -lm -I utilities utilities/instrument.c $INPUT_FILE -o $OUTPUT_FILE
+$COMPILER_COMMAND  -lm -I ${ROOTDIR}/utilities ${ROOTDIR}/utilities/instrument.c ${ROOTDIR}/$INPUT_FILE -o $OUTPUT_FILE
 
-echo "$COMPILER_COMMAND  -lm -I utilities utilities/instrument.c $INPUT_FILE -o $OUTPUT_FILE"
+echo "$COMPILER_COMMAND  -lm -I ${ROOTDIR}/utilities ${ROOTDIR}/utilities/instrument.c ${ROOTDIR}/$INPUT_FILE -o $OUTPUT_FILE"
 
 
 exit 0;
