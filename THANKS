@@ -6,6 +6,7 @@ giving feedback to PolyBench:
  * Peng Li
  * Sanjay Rajopadhye
  * Sven Verdoolaege
+ * Willy Wolff
 
 and the following for providing reference C implementations:
  * Dave Wonnacott, Haverford College <davew@cs.haverford.edu>
@@ -17,4 +18,3 @@ and the following for providing reference C implementations:
 
  * Gael Deest, University of Rennes 1 <gael.deest@irisa.fr>
    The Deriche filter implementation was provided by Gael.
-

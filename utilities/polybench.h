@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Apr. 14, 2015
+ * This version is stamped on May 10, 2016
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -8,6 +8,8 @@
  * Web address: http://polybench.sourceforge.net
  */
 /*
+ * polybench.h: this file is part of PolyBench/C
+ *
  * Polybench header for instrumentation.
  *
  * Programs must be compiled with `-I utilities utilities/polybench.c'
@@ -31,6 +33,15 @@
 # ifndef POLYBENCH_PADDING_FACTOR
 /* default: */
 #  define POLYBENCH_PADDING_FACTOR 0
+# endif
+
+/* Inter-array padding, for use with . By default, none is used. */
+# ifndef POLYBENCH_INTER_ARRAY_PADDING_FACTOR
+/* default: */
+#  define POLYBENCH_INTER_ARRAY_PADDING_FACTOR 0
+#  undef POLYBENCH_ENABLE_INTARRAY_PAD
+# else
+#  define POLYBENCH_ENABLE_INTARRAY_PAD
 # endif
 
 
@@ -71,7 +82,11 @@
 */
 # ifndef POLYBENCH_STACK_ARRAYS
 #  define POLYBENCH_ARRAY(x) *x
-#  define POLYBENCH_FREE_ARRAY(x) free((void*)x);
+#  ifdef POLYBENCH_ENABLE_INTARRAY_PAD
+#   define POLYBENCH_FREE_ARRAY(x) polybench_free_data((void*)x);
+#  else
+#   define POLYBENCH_FREE_ARRAY(x) free((void*)x);
+#  endif
 #  define POLYBENCH_DECL_VAR(x) (*x)
 # else
 #  define POLYBENCH_ARRAY(x) x
@@ -203,15 +218,8 @@ extern void polybench_timer_stop();
 extern void polybench_timer_print();
 # endif
 
-/* Function declaration. */
-# ifdef POLYBENCH_TIME
-extern void polybench_timer_start();
-extern void polybench_timer_stop();
-extern void polybench_timer_print();
-# endif
-
+/* PAPI support. */
 # ifdef POLYBENCH_PAPI
-extern void polybench_prepare_instruments();
 extern int polybench_papi_start_counter(int evid);
 extern void polybench_papi_stop_counter(int evid);
 extern void polybench_papi_init();
@@ -221,6 +229,13 @@ extern void polybench_papi_print();
 
 /* Function prototypes. */
 extern void* polybench_alloc_data(unsigned long long int n, int elt_size);
+extern void polybench_free_data(void* ptr);
+
+/* PolyBench internal functions that should not be directly called by */
+/* the user, unless when designing customized execution profiling */
+/* approaches. */
+extern void polybench_flush_cache();
+extern void polybench_prepare_instruments();
 
 
 #endif /* !POLYBENCH_H */

@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Apr. 14, 2015
+ * This version is stamped on May 10, 2016
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -73,7 +73,6 @@ void kernel_trmm(int m, int n,
 		 DATA_TYPE POLYBENCH_2D(B,M,N,m,n))
 {
   int i, j, k;
-  DATA_TYPE temp;
 
 //BLAS parameters
 //SIDE   = 'L'
@@ -86,7 +85,7 @@ void kernel_trmm(int m, int n,
 #pragma scop
   for (i = 0; i < _PB_M; i++)
      for (j = 0; j < _PB_N; j++) {
-        for (k = i+1; k < _PB_M; k++) 
+        for (k = i+1; k < _PB_M; k++)
            B[i][j] += A[k][i] * B[k][j];
         B[i][j] = alpha * B[i][j];
      }

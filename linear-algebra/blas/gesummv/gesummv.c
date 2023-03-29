@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Apr. 14, 2015
+ * This version is stamped on May 10, 2016
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -38,8 +38,8 @@ void init_array(int n,
     {
       x[i] = (DATA_TYPE)( i % n) / n;
       for (j = 0; j < n; j++) {
-	A[i][j] = (DATA_TYPE) (i*j % n) / n;
-	B[i][j] = (DATA_TYPE) (i*j % n) / n;
+	A[i][j] = (DATA_TYPE) ((i*j+1) % n) / n;
+	B[i][j] = (DATA_TYPE) ((i*j+2) % n) / n;
       }
     }
 }

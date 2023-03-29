@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Apr. 14, 2015
+ * This version is stamped on May 10, 2016
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -36,7 +36,7 @@ void init_array(int ni, int nj, int nk,
   *beta = 1.2;
   for (i = 0; i < ni; i++)
     for (j = 0; j < nj; j++)
-      C[i][j] = (DATA_TYPE) (i*j % ni) / ni;
+      C[i][j] = (DATA_TYPE) ((i*j+1) % ni) / ni;
   for (i = 0; i < ni; i++)
     for (j = 0; j < nk; j++)
       A[i][j] = (DATA_TYPE) (i*(j+1) % nk) / nk;

@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Apr. 14, 2015
+ * This version is stamped on May 10, 2016
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -35,10 +35,10 @@ void init_array(int n, int m,
   *beta = 1.2;
   for (i = 0; i < n; i++)
     for (j = 0; j < m; j++)
-      A[i][j] = (DATA_TYPE) (i*j%n) / n;
+      A[i][j] = (DATA_TYPE) ((i*j+1)%n) / n;
   for (i = 0; i < n; i++)
     for (j = 0; j < n; j++)
-      C[i][j] = (DATA_TYPE) (i*j%m) / m;
+      C[i][j] = (DATA_TYPE) ((i*j+2)%m) / m;
 }
 
 
@@ -74,7 +74,7 @@ void kernel_syrk(int n, int m,
   int i, j, k;
 
 //BLAS PARAMS
-//TRANS = 'N' 
+//TRANS = 'N'
 //UPLO  = 'L'
 // =>  Form  C := alpha*A*A**T + beta*C.
 //A is NxM

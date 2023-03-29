@@ -1,5 +1,5 @@
 /**
- * This version is stamped on Apr. 14, 2015
+ * This version is stamped on May 10, 2016
  *
  * Contact:
  *   Louis-Noel Pouchet <pouchet.ohio-state.edu>
@@ -23,7 +23,7 @@
 #   define NK 20
 #   define NL 22
 #   define NM 24
-#  endif 
+#  endif
 
 #  ifdef SMALL_DATASET
 #   define NI 40
@@ -31,7 +31,7 @@
 #   define NK 60
 #   define NL 70
 #   define NM 80
-#  endif 
+#  endif
 
 #  ifdef MEDIUM_DATASET
 #   define NI 180
@@ -39,7 +39,7 @@
 #   define NK 200
 #   define NL 210
 #   define NM 220
-#  endif 
+#  endif
 
 #  ifdef LARGE_DATASET
 #   define NI 800
@@ -47,7 +47,7 @@
 #   define NK 1000
 #   define NL 1100
 #   define NM 1200
-#  endif 
+#  endif
 
 #  ifdef EXTRALARGE_DATASET
 #   define NI 1600
@@ -55,7 +55,7 @@
 #   define NK 2000
 #   define NL 2200
 #   define NM 2400
-#  endif 
+#  endif
 
 
 #endif /* !(NI NJ NK NL NM) */
@@ -75,7 +75,7 @@
 #ifdef DATA_TYPE_IS_INT
 #  define DATA_TYPE int
 #  define DATA_PRINTF_MODIFIER "%d "
-#endif 
+#endif
 
 #ifdef DATA_TYPE_IS_FLOAT
 #  define DATA_TYPE float
@@ -96,4 +96,3 @@
 # endif
 
 #endif /* !_3MM_H */
-

@@ -1,8 +1,8 @@
 * * * * * * * * * *
-* PolyBench/C 4.1 *
+* PolyBench/C 4.2 *
 * * * * * * * * * *
 
-Copyright (c) 2011-2015 the Ohio State University.
+Copyright (c) 2011-2016 the Ohio State University.
 
 Contact:
    Louis-Noel Pouchet <pouchet@cse.ohio-state.edu>
@@ -25,14 +25,14 @@ include:
 
 
 PolyBench is currently available in C and in Fortran:
-- See PolyBench/C 4.1 for the C version
+- See PolyBench/C 4.2 for the C version
 - See PolyBench/Fortran 1.0 for the Fortran version (based on PolyBench/C 3.2)
 
-Available benchmarks (PolyBench/C 4.1)
+Available benchmarks (PolyBench/C 4.2)
 
 Benchmark	Description
-2mm		2 Matrix Multiplications (E=A.B; F=E.C; G=F+D)
-3mm		3 Matrix Multiplications (E=A.B; F=C.D; G=E.F)
+2mm		2 Matrix Multiplications (alpha * A * B * C + beta * D)
+3mm		3 Matrix Multiplications ((A*B)*(C*D))
 adi		Alternating Direction Implicit solver
 atax		Matrix Transpose and Vector Multiplication
 bicg		BiCG Sub Kernel of BiCGStab Linear Solver
@@ -51,13 +51,13 @@ head-3d		Heat equation over 3D data domain
 jacobi-1D	1-D Jacobi stencil computation
 jacobi-2D	2-D Jacobi stencil computation
 lu		LU decomposition
-ludcmp		LU decomposition followed by FS
+ludcmp		LU decomposition followed by Forward Substitution
 mvt		Matrix Vector Product and Transpose
 nussinov	Dynamic programming algorithm for sequence alignment
 seidel		2-D Seidel stencil computation
 symm		Symmetric matrix-multiply
-syr2k		Symmetric rank-2k operations
-syrk		Symmetric rank-k operations
+syr2k		Symmetric rank-2k update
+syrk		Symmetric rank-k update
 trisolv		Triangular solver
 trmm		Triangular matrix-multiply
 
@@ -66,10 +66,17 @@ See the end of the README for mailing lists, instructions to use
 PolyBench, etc.
 
 -------------
+* New in 4.2:
+-------------
+ - Fixed a bug in syr2k.
+ - Changed the data initialization function of several benchmarks.
+ - Minor updates in the documentation and PolyBench API.
+
+-------------
 * New in 4.1:
 -------------
  - Added LICENSE.txt
- - Fixed minor issues with cholesky both in documentation and implementation. 
+ - Fixed minor issues with cholesky both in documentation and implementation.
    (Reported by François Gindraud)
  - Simplified the macros for switching between data types. Now users
    may specify DATA_TYPE_IS_XXX where XXX is one of FLOAT/DOUBLE/INT
@@ -140,14 +147,12 @@ expanded. These variables were changed to only use a scalar.
 - Added an option to build the test suite with constant loop bounds
   (default is parametric loop bounds)
 
-
 -------------
 * New in 3.1:
 -------------
 
 - Fixed a typo in polybench.h, causing compilation problems for 3D arrays.
 - Set by default heap arrays, stack arrays are now optional.
-
 
 -------------
 * New in 3.0:
@@ -189,10 +194,10 @@ See utilities/benchmark_list for paths to each files.
 See doc/polybench.pdf for detailed description of the algorithms.
 
 
+
 ------------------------------
 * Sample compilation commands:
 ------------------------------
-
 
 ** To compile a benchmark without any monitoring:
 -------------------------------------------------
@@ -214,7 +219,6 @@ $> ./atax_ref 2>atax_ref.out
 
 
 
-
 -------------------------
 * Some available options:
 -------------------------
@@ -222,35 +226,58 @@ $> ./atax_ref 2>atax_ref.out
 They are all passed as macro definitions during compilation time (e.g,
 -Dname_of_the_option).
 
+** Typical options:
+-------------------
+
 - POLYBENCH_TIME: output execution time (gettimeofday) [default: off]
+
+- MINI_DATASET, SMALL_DATASET, MEDIUM_DATASET, LARGE_DATASET,
+  EXTRALARGE_DATASET: set the dataset size to be used
+  [default: STANDARD_DATASET]
+
+- POLYBENCH_DUMP_ARRAYS: dump all live-out arrays on stderr [default: off]
+
+- POLYBENCH_STACK_ARRAYS: use stack allocation instead of malloc [default: off]
+
+
+** Options that may lead to better performance:
+-----------------------------------------------
+
+- POLYBENCH_USE_RESTRICT: Use restrict keyword to allow compilers to
+  assume absence of aliasing. [default: off]
+
+- POLYBENCH_USE_SCALAR_LB: Use scalar loop bounds instead of parametric ones.
+  [default: off]
+
+- POLYBENCH_PADDING_FACTOR: Pad all dimensions of all arrays by this
+  value [default: 0]
+
+- POLYBENCH_INTER_ARRAY_PADDING_FACTOR: Offset the starting address of
+  polybench arrays allocated on the heap (default) by a multiple of
+  this value [default: 0]
+
+- POLYBENCH_USE_C99_PROTO: Use standard C99 prototype for the functions.
+  [default: off]
+
+
+** Timing/profiling options:
+----------------------------
+
+- POLYBENCH_PAPI: turn on papi timing (see below).
+
+- POLYBENCH_CACHE_SIZE_KB: cache size to flush, in kB [default: 33MB]
 
 - POLYBENCH_NO_FLUSH_CACHE: don't flush the cache before calling the
   timer [default: flush the cache]
+
+- POLYBENCH_CYCLE_ACCURATE_TIMER: Use Time Stamp Counter to monitor
+  the execution time of the kernel [default: off]
 
 - POLYBENCH_LINUX_FIFO_SCHEDULER: use FIFO real-time scheduler for the
   kernel execution, the program must be run as root, under linux only,
   and compiled with -lc [default: off]
 
-- POLYBENCH_CACHE_SIZE_KB: cache size to flush, in kB [default: 33MB]
 
-- POLYBENCH_STACK_ARRAYS: use stack allocation instead of malloc [default: off]
-
-- POLYBENCH_DUMP_ARRAYS: dump all live-out arrays on stderr [default: off]
-
-- POLYBENCH_CYCLE_ACCURATE_TIMER: Use Time Stamp Counter to monitor
-  the execution time of the kernel [default: off]
-
-- POLYBENCH_PAPI: turn on papi timing (see below).
-
-- MINI_DATASET, SMALL_DATASET, STANDARD_DATASET, LARGE_DATASET,
-  EXTRALARGE_DATASET: set the dataset size to be used
-  [default: STANDARD_DATASET]
-
-- POLYBENCH_USE_C99_PROTO: Use standard C99 prototype for the functions.
-
-- POLYBENCH_USE_SCALAR_LB: Use scalar loop bounds instead of parametric ones.
-
-- POLYBENCH_USE_RESTRICT: Use restrict keyword to allow compilers to assume absence of aliasing.
 
 ---------------
 * PAPI support:
@@ -297,7 +324,6 @@ elapsed cycles.
 
 
 
-
 ----------------------------------------
 * Generating macro-free benchmark suite:
 ----------------------------------------
@@ -313,6 +339,7 @@ the desired configuration, for instance to create a full C99 version
 
 $> PARGS="-I utilities -DPOLYBENCH_USE_C99_PROTO";
 $> for i in `cat utilities/benchmark_list`; do perl utilities/create_cpped_version.pl $i "$PARGS"; done
+
 
 
 ------------------
