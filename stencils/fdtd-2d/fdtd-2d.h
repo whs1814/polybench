@@ -37,8 +37,8 @@
 
 #  ifdef LARGE_DATASET
 #   define TMAX 500
-#   define NX 1000
-#   define NY 1200
+#   define NX 2048
+#   define NY 2048
 #  endif 
 
 #  ifdef EXTRALARGE_DATASET
@@ -67,7 +67,7 @@
 
 #ifdef DATA_TYPE_IS_FLOAT
 #  define DATA_TYPE float
-#  define DATA_PRINTF_MODIFIER "%0.2f "
+#  define DATA_PRINTF_MODIFIER "%0.6f "
 #  define SCALAR_VAL(x) x##f
 #  define SQRT_FUN(x) sqrtf(x)
 #  define EXP_FUN(x) expf(x)
@@ -76,7 +76,7 @@
 
 #ifdef DATA_TYPE_IS_DOUBLE
 #  define DATA_TYPE double
-#  define DATA_PRINTF_MODIFIER "%0.2lf "
+#  define DATA_PRINTF_MODIFIER "%0.6lf "
 #  define SCALAR_VAL(x) x
 #  define SQRT_FUN(x) sqrt(x)
 #  define EXP_FUN(x) exp(x)
