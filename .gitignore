@@ -1,0 +1,6 @@
+*/*/*/*.hipcc
+*/*/*/*_host.cpp
+*/*/*/*_kernel.hpp
+*/*/*.hipcc
+*/*/*_host.cpp
+*/*/*_kernel.hpp

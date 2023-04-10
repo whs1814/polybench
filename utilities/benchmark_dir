@@ -1,0 +1,15 @@
+convolution/2DCONV,2DConvolution
+convolution/3DCONV,3DConvolution
+linear-algebra/kernels/2mm,2mm
+linear-algebra/kernels/3mm,3mm
+linear-algebra/kernels/atax,atax
+linear-algebra/kernels/bicg,bicg
+linear-algebra/blas/gemm,gemm
+linear-algebra/blas/gesummv,gesummv
+linear-algebra/solvers/gramschmidt,gramschmidt
+linear-algebra/kernels/mvt,mvt
+linear-algebra/blas/syr2k,syr2k
+linear-algebra/blas/syrk,syrk
+datamining/correlation,correlation
+datamining/covariance,covariance
+stencils/fdtd-2d,fdtd-2d

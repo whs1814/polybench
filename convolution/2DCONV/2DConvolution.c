@@ -5,22 +5,15 @@
 #include <stdarg.h>
 #include <string.h>
 
+/* Include polybench common header. */
+#include <polybench.h>
+
 
 /* Problem size */
 #define NI 4096
 #define NJ 4096
 
 typedef float DATA_TYPE;
-
-double rtclock()
-{
-    struct timezone Tzp;
-    struct timeval Tp;
-    int stat;
-    stat = gettimeofday (&Tp, &Tzp);
-    if (stat != 0) printf("Error return from gettimeofday: %d",stat);
-    return(Tp.tv_sec + Tp.tv_usec*1.0e-6);
-}
 
 void conv2D(DATA_TYPE* A, DATA_TYPE* B)
 {
@@ -57,18 +50,25 @@ void init(DATA_TYPE* A)
 }
 int main(int argc, char *argv[])
 {
-int i, j;
-        DATA_TYPE* A;
-        DATA_TYPE* B;
- A = (DATA_TYPE*)malloc(NI*NJ*sizeof(DATA_TYPE));
-        B = (DATA_TYPE*)malloc(NI*NJ*sizeof(DATA_TYPE));
-//initialize the arrays
- init(A);
+  int i, j;
+  DATA_TYPE* A;
+  DATA_TYPE* B;
+  A = (DATA_TYPE*)malloc(NI*NJ*sizeof(DATA_TYPE));
+  B = (DATA_TYPE*)malloc(NI*NJ*sizeof(DATA_TYPE));
+  //initialize the arrays
+  init(A);
+
+  /* Start timer. */
+  polybench_start_instruments;
 
         conv2D(A, B);
 //for (i = 1; i < NI - 1; ++i) // 0
-  //              for (j = 1; j < NJ - 1; ++j) // 1
+//              for (j = 1; j < NJ - 1; ++j) // 1
 //printf("%0.6f\n", B[i*NJ + j]);
+  /* Stop and print timer. */
+  polybench_stop_instruments;
+  polybench_print_instruments;
+
         free(A);
         free(B);
 

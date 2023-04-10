@@ -6,19 +6,14 @@
 #include <stdarg.h>
 #include <string.h>
 
+/* Include polybench common header. */
+#include <polybench.h>
+
 #define NI 256
 #define NJ 256
 #define NK 256
 typedef float DATA_TYPE;
-double rtclock()
-{
-    struct timezone Tzp;
-    struct timeval Tp;
-    int stat;
-    stat = gettimeofday (&Tp, &Tzp);
-    if (stat != 0) printf("Error return from gettimeofday: %d",stat);
-    return(Tp.tv_sec + Tp.tv_usec*1.0e-6);
-}
+
 void conv3D(DATA_TYPE* A, DATA_TYPE* B)
 {
         int i, j, k;
@@ -75,11 +70,18 @@ int main(int argc, char *argv[])
 
         init(A);
 
+  /* Start timer. */
+  polybench_start_instruments;
+
         conv3D(A, B);
-  for (i = 1; i < NI - 1; ++i)
-                for (j = 1; j < NJ - 1; ++j)
-                      for (k = 1; k < NK - 1; ++k)
-       printf("%0.6f\n",B[i*(NK * NJ) + j*NK + k]);
+  //for (i = 1; i < NI - 1; ++i)
+  //              for (j = 1; j < NJ - 1; ++j)
+  //                    for (k = 1; k < NK - 1; ++k)
+  //     printf("%0.6f\n",B[i*(NK * NJ) + j*NK + k]);
+  /* Stop and print timer. */
+  polybench_stop_instruments;
+  polybench_print_instruments;
+
         free(A);
         free(B);
 
