@@ -1,0 +1,6 @@
+datamining/correlation,correlation
+datamining/covariance,covariance
+linear-algebra/kernels/3mm,3mm
+linear-algebra/blas/gemm,gemm
+linear-algebra/blas/syrk,syrk
+medley/deriche,deriche

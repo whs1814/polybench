@@ -8,10 +8,12 @@
 
 my $GEN_CONFIG = 0;
 my $TARGET_DIR = ".";
+my $GEN_OMP = 0;
 
 if ($#ARGV !=0 && $#ARGV != 1) {
-   printf("usage perl makefile-gen.pl output-dir [-cfg]\n");
+   printf("usage perl makefile-gen.pl output-dir [-cfg|-omp]\n");
    printf("  -cfg option generates config.mk in the output-dir.\n");
+   printf("  -omp option generates [OpenMP Offload] config.mk in the output-dir.\n");
    exit(1);
 }
 
@@ -20,6 +22,8 @@ if ($#ARGV !=0 && $#ARGV != 1) {
 foreach my $arg (@ARGV) {
    if ($arg =~ /-cfg/) {
       $GEN_CONFIG = 1;
+   } elsif ($arg =~ /-omp/) {
+      $GEN_OMP = 1;
    } elsif (!($arg =~ /^-/)) {
       $TARGET_DIR = $arg;
    }
@@ -82,6 +86,21 @@ open FILE, '>'.$TARGET_DIR.'/config.mk';
 print FILE << "EOF";
 CC=gcc
 CFLAGS=-O2 -DPOLYBENCH_DUMP_ARRAYS -DPOLYBENCH_USE_C99_PROTO
+EOF
+
+close FILE;
+
+}
+
+if ($GEN_OMP) {
+open FILE, '>'.$TARGET_DIR.'/config.mk';
+
+print FILE << "EOF";
+CC=clang
+#OMPFLAGS= -target x86_64-pc-linux-gnu -fopenmp -fopenmp-targets=nvptx64-nvidia-cuda -Xopenmp-target=nvptx64-nvidia-cuda -march=sm_35
+OMPFLAGS= -target x86_64-pc-linux-gnu -fopenmp -fopenmp-targets=amdgcn-amd-amdhsa -Xopenmp-target=amdgcn-amd-amdhsa -march=gfx906
+CFLAGS=-O3 -DPOLYBENCH_TIME -DPOLYBENCH_USE_C99_PROTO -lm \${OMPFLAGS}
+#CFLAGS += -DPOLYBENCH_DUMP_ARRAYS
 EOF
 
 close FILE;
