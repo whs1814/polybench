@@ -74,6 +74,7 @@ void kernel_durbin(int n,
  beta = SCALAR_VAL(1.0);
  alpha = -r[0];
 
+#pragma omp target teams distribute parallel for map(to:r[0:N],z[0:N]), map(tofrom:y[0:N])
  for (k = 1; k < _PB_N; k++) {
    beta = (1-alpha*alpha)*beta;
    sum = SCALAR_VAL(0.0);

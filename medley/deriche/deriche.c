@@ -89,6 +89,7 @@ void kernel_deriche(int w, int h, DATA_TYPE alpha,
    b2 = -EXP_FUN(SCALAR_VAL(-2.0)*alpha);
    c1 = c2 = 1;
 
+#pragma omp target teams distribute parallel for  map(tofrom:y1[0:W][0:H],imgIn[0:W][0:H])
    for (i=0; i<_PB_W; i++) {
         ym1 = SCALAR_VAL(0.0);
         ym2 = SCALAR_VAL(0.0);
@@ -101,6 +102,7 @@ void kernel_deriche(int w, int h, DATA_TYPE alpha,
         }
     }
 
+#pragma omp target teams distribute parallel for  map(tofrom:y2[0:W][0:H],imgIn[0:W][0:H])
     for (i=0; i<_PB_W; i++) {
         yp1 = SCALAR_VAL(0.0);
         yp2 = SCALAR_VAL(0.0);
@@ -115,11 +117,13 @@ void kernel_deriche(int w, int h, DATA_TYPE alpha,
         }
     }
 
+#pragma omp target teams distribute parallel for  map(tofrom:y1[0:W][0:H],y2[0:W][0:H],imgOut[0:W][0:H])
     for (i=0; i<_PB_W; i++)
         for (j=0; j<_PB_H; j++) {
             imgOut[i][j] = c1 * (y1[i][j] + y2[i][j]);
         }
 
+#pragma omp target teams distribute parallel for  map(tofrom:y1[0:W][0:H],imgOut[0:W][0:H])
     for (j=0; j<_PB_H; j++) {
         tm1 = SCALAR_VAL(0.0);
         ym1 = SCALAR_VAL(0.0);
@@ -133,6 +137,7 @@ void kernel_deriche(int w, int h, DATA_TYPE alpha,
     }
     
 
+#pragma omp target teams distribute parallel for  map(tofrom:y2[0:W][0:H],imgOut[0:W][0:H])
     for (j=0; j<_PB_H; j++) {
         tp1 = SCALAR_VAL(0.0);
         tp2 = SCALAR_VAL(0.0);
@@ -147,6 +152,7 @@ void kernel_deriche(int w, int h, DATA_TYPE alpha,
         }
     }
 
+#pragma omp target teams distribute parallel for  map(tofrom:y1[0:W][0:H],y2[0:W][0:H],imgOut[0:W][0:H])
     for (i=0; i<_PB_W; i++)
         for (j=0; j<_PB_H; j++)
             imgOut[i][j] = c2*(y1[i][j] + y2[i][j]);

@@ -87,6 +87,7 @@ void kernel_lu(int n,
   int i, j, k;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(tofrom:A[0:N][0:N])
   for (i = 0; i < _PB_N; i++) {
     for (j = 0; j <i; j++) {
        for (k = 0; k < j; k++) {

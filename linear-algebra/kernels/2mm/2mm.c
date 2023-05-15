@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <omp.h>
 
 /* Include polybench common header. */
 #include <polybench.h>
@@ -86,6 +87,7 @@ void kernel_2mm(int ni, int nj, int nk, int nl,
 
 #pragma scop
   /* D := alpha*A*B*C + beta*D */
+#pragma omp target teams distribute parallel for map(to:A[0:NI][0:NK],B[0:NK][0:NJ]), map(tofrom:tmp[0:NI][0:NJ]) collapse(2)
   for (i = 0; i < _PB_NI; i++)
     for (j = 0; j < _PB_NJ; j++)
       {
@@ -93,6 +95,7 @@ void kernel_2mm(int ni, int nj, int nk, int nl,
 	for (k = 0; k < _PB_NK; ++k)
 	  tmp[i][j] += alpha * A[i][k] * B[k][j];
       }
+#pragma omp target teams distribute parallel for map(to:tmp[0:NI][0:NJ],C[0:NJ][0:NL]), map(tofrom:D[0:NI][0:NL]) collapse(2)
   for (i = 0; i < _PB_NI; i++)
     for (j = 0; j < _PB_NL; j++)
       {

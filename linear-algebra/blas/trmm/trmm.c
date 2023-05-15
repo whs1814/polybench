@@ -84,6 +84,7 @@ void kernel_trmm(int m, int n,
 // A is MxM
 // B is MxN
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:A[0:M][0:M]), map(tofrom:B[0:M][0:N])
   for (i = 0; i < _PB_M; i++)
      for (j = 0; j < _PB_N; j++) {
         for (k = i+1; k < _PB_M; k++) 

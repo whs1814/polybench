@@ -67,6 +67,7 @@ void kernel_floyd_warshall(int n,
   int i, j, k;
 
 #pragma scop
+#pragma omp target teams distribute parallel for  map(tofrom:path[0:N][0:N])
   for (k = 0; k < _PB_N; k++)
     {
       for(i = 0; i < _PB_N; i++)

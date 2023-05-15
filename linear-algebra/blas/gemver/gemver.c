@@ -98,17 +98,21 @@ void kernel_gemver(int n,
 
 #pragma scop
 
+#pragma omp target teams distribute parallel for map(to:v1[0:N],v2[0:N],u1[0:N],u2[0:N]), map(tofrom:A[0:N][0:N])
   for (i = 0; i < _PB_N; i++)
     for (j = 0; j < _PB_N; j++)
       A[i][j] = A[i][j] + u1[i] * v1[j] + u2[i] * v2[j];
 
+#pragma omp target teams distribute parallel for map(to:A[0:N][0:N],y[0:N]), map(tofrom:x[0:N])
   for (i = 0; i < _PB_N; i++)
     for (j = 0; j < _PB_N; j++)
       x[i] = x[i] + beta * A[j][i] * y[j];
 
+#pragma omp target teams distribute parallel for map(to:z[0:N]), map(tofrom:x[0:N])
   for (i = 0; i < _PB_N; i++)
     x[i] = x[i] + z[i];
 
+#pragma omp target teams distribute parallel for map(to:A[0:N][0:N],x[0:N]), map(tofrom:w[0:N])
   for (i = 0; i < _PB_N; i++)
     for (j = 0; j < _PB_N; j++)
       w[i] = w[i] +  alpha * A[i][j] * x[j];

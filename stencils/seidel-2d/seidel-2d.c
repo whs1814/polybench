@@ -65,6 +65,7 @@ void kernel_seidel_2d(int tsteps,
   int t, i, j;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(tofrom:A[0:N][0:N])
   for (t = 0; t <= _PB_TSTEPS - 1; t++)
     for (i = 1; i<= _PB_N - 2; i++)
       for (j = 1; j <= _PB_N - 2; j++)

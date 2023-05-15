@@ -102,6 +102,7 @@ void kernel_ludcmp(int n,
   DATA_TYPE w;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(tofrom:A[0:N][0:N])
   for (i = 0; i < _PB_N; i++) {
     for (j = 0; j <i; j++) {
        w = A[i][j];
@@ -119,6 +120,7 @@ void kernel_ludcmp(int n,
     }
   }
 
+#pragma omp target teams distribute parallel for map(to:b[0:N],y[0:N])  map(tofrom:A[0:N][0:N])
   for (i = 0; i < _PB_N; i++) {
      w = b[i];
      for (j = 0; j < i; j++)
@@ -126,6 +128,7 @@ void kernel_ludcmp(int n,
      y[i] = w;
   }
 
+#pragma omp target teams distribute parallel for map(to:x[0:N],y[0:N])  map(tofrom:A[0:N][0:N])
    for (i = _PB_N-1; i >=0; i--) {
      w = y[i];
      for (j = i+1; j < _PB_N; j++)

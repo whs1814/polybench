@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <omp.h>
 
 /* Include polybench common header. */
 #include <polybench.h>
@@ -70,6 +71,7 @@ void kernel_doitgen(int nr, int nq, int np,
   int r, q, p, s;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:C4[0:NP][0:NP],sum[0:NP]), map(tofrom:A[0:NR][0:NQ][0:NP])
   for (r = 0; r < _PB_NR; r++)
     for (q = 0; q < _PB_NQ; q++)  {
       for (p = 0; p < _PB_NP; p++)  {

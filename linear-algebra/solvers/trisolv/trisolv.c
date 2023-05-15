@@ -71,6 +71,7 @@ void kernel_trisolv(int n,
   int i, j;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:L[0:N][0:N],b[0:N])  map(tofrom:x[0:N])
   for (i = 0; i < _PB_N; i++)
     {
       x[i] = b[i];

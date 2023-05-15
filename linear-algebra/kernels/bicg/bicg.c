@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <omp.h>
 
 /* Include polybench common header. */
 #include <polybench.h>
@@ -80,8 +81,10 @@ void kernel_bicg(int m, int n,
   int i, j;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(tofrom:s[0:M])
   for (i = 0; i < _PB_M; i++)
     s[i] = 0;
+#pragma omp target teams distribute parallel for map(to:A[0:N][0:M],r[0:N],p[0:M]), map(tofrom:s[0:M],q[0:N])
   for (i = 0; i < _PB_N; i++)
     {
       q[i] = SCALAR_VAL(0.0);

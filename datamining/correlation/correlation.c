@@ -76,6 +76,7 @@ void kernel_correlation(int m, int n,
 
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:data[0:_PB_N][0:_PB_M]), map(from:mean[0:_PB_M])
   for (j = 0; j < _PB_M; j++)
     {
       mean[j] = SCALAR_VAL(0.0);
@@ -84,7 +85,7 @@ void kernel_correlation(int m, int n,
       mean[j] /= float_n;
     }
 
-
+#pragma omp target teams distribute parallel for map(to:mean[0:_PB_M],data[0:_PB_N][0:_PB_M]), map(from:stddev[0:_PB_M])
    for (j = 0; j < _PB_M; j++)
     {
       stddev[j] = SCALAR_VAL(0.0);
@@ -99,6 +100,7 @@ void kernel_correlation(int m, int n,
     }
 
   /* Center and reduce the column vectors. */
+#pragma omp target teams distribute parallel for map(to:mean[0:_PB_M],stddev[0:_PB_M]), map(from:data[0:_PB_N][0:_PB_M])
   for (i = 0; i < _PB_N; i++)
     for (j = 0; j < _PB_M; j++)
       {
@@ -107,6 +109,7 @@ void kernel_correlation(int m, int n,
       }
 
   /* Calculate the m * m correlation matrix. */
+#pragma omp target teams distribute parallel for map(to:data[0:_PB_N][0:_PB_M]), map(from:corr[0:_PB_M][0:_PB_N])
   for (i = 0; i < _PB_M-1; i++)
     {
       corr[i][i] = SCALAR_VAL(1.0);

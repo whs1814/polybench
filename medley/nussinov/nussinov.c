@@ -83,6 +83,7 @@ void kernel_nussinov(int n, base POLYBENCH_1D(seq,N,n),
   int i, j, k;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:seq[0:N]), map(tofrom:table[0:N][0:N])
  for (i = _PB_N-1; i >= 0; i--) {
   for (j=i+1; j<_PB_N; j++) {
 

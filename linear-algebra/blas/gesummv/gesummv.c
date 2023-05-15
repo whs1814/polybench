@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <omp.h>
 
 /* Include polybench common header. */
 #include <polybench.h>
@@ -80,6 +81,7 @@ void kernel_gesummv(int n,
   int i, j;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:A[0:N][0:N],B[0:N][0:N],tmp[0:N],x[0:N]), map(tofrom:y[0:N])
   for (i = 0; i < _PB_N; i++)
     {
       tmp[i] = SCALAR_VAL(0.0);

@@ -69,6 +69,7 @@ void kernel_jacobi_1d(int tsteps,
   int t, i;
 
 #pragma scop
+#pragma omp target teams distribute parallel for  map(tofrom:B[0:N],A[0:N])
   for (t = 0; t < _PB_TSTEPS; t++)
     {
       for (i = 1; i < _PB_N - 1; i++)

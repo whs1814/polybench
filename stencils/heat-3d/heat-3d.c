@@ -69,6 +69,7 @@ void kernel_heat_3d(int tsteps,
   int t, i, j, k;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(tofrom:A[0:N][0:N][0:N],B[0:N][0:N][0:N])
     for (t = 1; t <= TSTEPS; t++) {
         for (i = 1; i < _PB_N-1; i++) {
             for (j = 1; j < _PB_N-1; j++) {

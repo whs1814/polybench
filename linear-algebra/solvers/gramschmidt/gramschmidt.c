@@ -86,6 +86,7 @@ void kernel_gramschmidt(int m, int n,
   DATA_TYPE nrm;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:R[0:N][0:N],Q[0:M][0:N]), map(tofrom:A[0:M][0:N])
   for (k = 0; k < _PB_N; k++)
     {
       nrm = SCALAR_VAL(0.0);

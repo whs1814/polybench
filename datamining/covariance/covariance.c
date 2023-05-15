@@ -70,6 +70,7 @@ void kernel_covariance(int m, int n,
   int i, j, k;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:data[0:_PB_N][0:_PB_M]), map(from:mean[0:_PB_M])
   for (j = 0; j < _PB_M; j++)
     {
       mean[j] = SCALAR_VAL(0.0);
@@ -78,10 +79,12 @@ void kernel_covariance(int m, int n,
       mean[j] /= float_n;
     }
 
+#pragma omp target teams distribute parallel for map(to:mean[0:_PB_M]), map(from:data[0:_PB_N][0:_PB_M])
   for (i = 0; i < _PB_N; i++)
     for (j = 0; j < _PB_M; j++)
       data[i][j] -= mean[j];
 
+#pragma omp target teams distribute parallel for map(to:data[0:_PB_N][0:_PB_M]), map(from:cov[0:_PB_M][0:_PB_N])
   for (i = 0; i < _PB_M; i++)
     for (j = i; j < _PB_M; j++)
       {

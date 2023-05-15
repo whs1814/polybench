@@ -71,8 +71,10 @@ void kernel_atax(int m, int n,
   int i, j;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(tofrom:y[0:N])
   for (i = 0; i < _PB_N; i++)
     y[i] = 0;
+#pragma omp target teams distribute parallel for map(to:A[0:M][0:N],x[0:N],tmp[0:M]), map(tofrom:y[0:N])
   for (i = 0; i < _PB_M; i++)
     {
       tmp[i] = SCALAR_VAL(0.0);

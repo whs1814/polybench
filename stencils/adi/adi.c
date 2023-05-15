@@ -93,6 +93,7 @@ void kernel_adi(int tsteps, int n,
   e = SCALAR_VAL(1.0)+mul2;
   f = d;
 
+#pragma omp target teams distribute parallel for map(to:v[0:N][0:N],p[0:N][0:N],q[0:N][0:N]), map(tofrom:u[0:N][0:N])
  for (t=1; t<=_PB_TSTEPS; t++) {
     //Column Sweep
     for (i=1; i<_PB_N-1; i++) {

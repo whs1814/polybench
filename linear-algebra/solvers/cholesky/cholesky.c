@@ -87,6 +87,7 @@ void kernel_cholesky(int n,
 
 
 #pragma scop
+#pragma omp target teams distribute parallel for  map(tofrom:A[0:N][0:N])
   for (i = 0; i < _PB_N; i++) {
      //j<i
      for (j = 0; j < i; j++) {

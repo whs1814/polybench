@@ -99,6 +99,7 @@ void kernel_fdtd_2d(int tmax,
 
 #pragma scop
 
+#pragma omp target teams distribute parallel for map(to:ex[0:NX][0:NY],ey[0:NX][0:NY],_fict_[0:TMAX]), map(tofrom:hz[0:NX][0:NY])
   for(t = 0; t < _PB_TMAX; t++)
     {
       for (j = 0; j < _PB_NY; j++)

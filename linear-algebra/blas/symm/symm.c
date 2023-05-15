@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <omp.h>
 
 /* Include polybench common header. */
 #include <polybench.h>
@@ -90,6 +91,7 @@ void kernel_symm(int m, int n,
 // C is MxN
 //note that due to Fortran array layout, the code below more closely resembles upper triangular case in BLAS
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:A[0:M][0:N],B[0:M][0:N]), map(tofrom:C[0:M][0:N])
    for (i = 0; i < _PB_M; i++)
       for (j = 0; j < _PB_N; j++ )
       {

@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <omp.h>
 
 /* Include polybench common header. */
 #include <polybench.h>
@@ -85,9 +86,11 @@ void kernel_mvt(int n,
   int i, j;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:A[0:N][0:N],y_1[0:N]), map(tofrom:x1[0:N])
   for (i = 0; i < _PB_N; i++)
     for (j = 0; j < _PB_N; j++)
       x1[i] = x1[i] + A[i][j] * y_1[j];
+#pragma omp target teams distribute parallel for map(to:A[0:N][0:N],y_2[0:N]), map(tofrom:x2[0:N])
   for (i = 0; i < _PB_N; i++)
     for (j = 0; j < _PB_N; j++)
       x2[i] = x2[i] + A[j][i] * y_2[j];

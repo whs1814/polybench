@@ -80,6 +80,7 @@ void kernel_syrk(int n, int m,
 //A is NxM
 //C is NxN
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:A[0:N][0:M]), map(tofrom:C[0:N][0:N])
   for (i = 0; i < _PB_N; i++) {
     for (j = 0; j <= i; j++)
       C[i][j] *= beta;

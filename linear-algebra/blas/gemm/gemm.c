@@ -19,6 +19,7 @@
 
 /* Include benchmark-specific header. */
 #include "gemm.h"
+#include <omp.h>
 
 
 /* Array initialization. */
@@ -86,6 +87,7 @@ void kernel_gemm(int ni, int nj, int nk,
 //B is NKxNJ
 //C is NIxNJ
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:A[0:NI][0:NK],B[0:NK][0:NJ]), map(tofrom:C[0:NI][0:NJ])
   for (i = 0; i < _PB_NI; i++) {
     for (j = 0; j < _PB_NJ; j++)
 	C[i][j] *= beta;

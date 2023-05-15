@@ -81,6 +81,7 @@ void kernel_3mm(int ni, int nj, int nk, int nl, int nm,
   int i, j, k;
 
 #pragma scop
+#pragma omp target teams distribute parallel for map(to:A[0:_PB_NI][0:_PB_NK],B[0:_PB_NK][0:_PB_NJ]), map(from:E[0:_PB_NI][0:_PB_NJ]) //collapse (2)
   /* E := A*B */
   for (i = 0; i < _PB_NI; i++)
     for (j = 0; j < _PB_NJ; j++)
@@ -90,6 +91,7 @@ void kernel_3mm(int ni, int nj, int nk, int nl, int nm,
 	  E[i][j] += A[i][k] * B[k][j];
       }
   /* F := C*D */
+#pragma omp target teams distribute parallel for map(to:C[0:_PB_NJ][0:_PB_NM],D[0:_PB_NM][0:_PB_NL]), map(from:F[0:_PB_NJ][0:_PB_NL]) //collapse (2)
   for (i = 0; i < _PB_NJ; i++)
     for (j = 0; j < _PB_NL; j++)
       {
@@ -98,6 +100,7 @@ void kernel_3mm(int ni, int nj, int nk, int nl, int nm,
 	  F[i][j] += C[i][k] * D[k][j];
       }
   /* G := E*F */
+#pragma omp target teams distribute parallel for map(to:E[0:_PB_NI][0:_PB_NJ],F[0:_PB_NJ][0:_PB_NL]), map(from:G[0:_PB_NI][0:_PB_NL])// collapse (2)
   for (i = 0; i < _PB_NI; i++)
     for (j = 0; j < _PB_NL; j++)
       {
